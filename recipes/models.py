@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 
 from autoslug import AutoSlugField
+from stdimage import StdImageField
 
 User = get_user_model()
 
@@ -32,7 +33,15 @@ class Recipe(models.Model):
         related_name='recipes',
         verbose_name='Автор рецепта'
     )
-    image = models.ImageField('Изображение', upload_to='recipes/')
+    image = StdImageField(
+        upload_to='recipes/',
+        blank=True,
+        variations={
+            'large': (480, 480),
+            'thumbnail': (100, 100, True),
+            'medium': (364, 240), },
+        delete_orphans=True
+    )
     text = models.TextField('Текст рецепта')
     ingredients = models.ManyToManyField(
         Ingredient,

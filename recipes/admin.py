@@ -32,13 +32,6 @@ class RecipeIngredientInline(admin.TabularInline):
     verbose_name = 'ингредиент'
 
 
-@admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
-    form = TagForm
-    list_display = ('title', 'color', 'display_name')
-    list_filter = ('title', )
-
-
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
@@ -51,3 +44,10 @@ class RecipeAdmin(admin.ModelAdmin):
     ordering = ('-pub_date', )
     inlines = (RecipeIngredientInline, )
     date_hierarchy = 'pub_date'
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    form = TagForm
+    list_display = ('title', 'color', 'display_name')
+    list_filter = ('title',)
