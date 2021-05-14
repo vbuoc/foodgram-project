@@ -26,13 +26,12 @@ SECRET_KEY = 'django-insecure-$2$z8w!ifueyi5ubx-@wnph3*#5r$15o4m_f89nrh8@z-r13p$
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
+SITE_ID = 1  # example.com
 
 # Application definition
 INSTALLED_APPS = [
     'recipes',
     'users',
-    'about',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
