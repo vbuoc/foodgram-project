@@ -4,6 +4,11 @@ import recipes.views as recipes_views
 
 recipes_urls = [
     path('new/', recipes_views.RecipeView.as_view(), name='recipe_new'),
+    path(
+        '<int:recipe_id>/<slug:slug>/',
+        recipes_views.RecipeViewSlug,
+        name='recipe_view_slug',
+    ),
 ]
 
 purchases_urls = [

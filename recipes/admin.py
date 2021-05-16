@@ -3,7 +3,6 @@ from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
-from recipes.forms import TagForm
 from recipes.models import (
     Ingredient,
     Recipe,
@@ -48,6 +47,5 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    form = TagForm
     list_display = ('title', 'color', 'display_name')
-    list_filter = ('title',)
+    list_filter = ('display_name',)

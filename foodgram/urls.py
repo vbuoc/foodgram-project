@@ -5,8 +5,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 flatpages_urls = [
-    path('', flatpage, {'url': '/author/'}, name='about_author'),
-    path('', flatpage, {'url': '/tech/'}, name='about_tech'),
+    path('author/', flatpage, {'url': '/author/'}, name='about_author'),
+    path('tech/', flatpage, {'url': '/tech/'}, name='about_tech'),
 ]
 
 urlpatterns = [

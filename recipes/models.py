@@ -92,9 +92,14 @@ class RecipeIngredient(models.Model):
 
 
 class Tag(models.Model):
+    COLORS = (
+        ('green', 'Зеленый'),
+        ('orange', 'Оранжевый'),
+        ('purple', 'Пурпурный')
+    )
     title = models.CharField('Имя тега', max_length=50, db_index=True)
     display_name = models.CharField('Имя тега для шаблона', max_length=50)
-    color = models.CharField('Цвет тега', max_length=50)
+    color = models.CharField('Цвет тега', max_length=50, choices=COLORS)
 
     class Meta:
         verbose_name = 'тег'
