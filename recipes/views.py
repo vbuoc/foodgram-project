@@ -1,8 +1,8 @@
-from typing import List
-
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from recipes.models import Recipe, Tag
+from recipes.forms import RecipeForm
 
 
 class RecipeBaseView(ListView):
@@ -16,7 +16,7 @@ class RecipeBaseView(ListView):
 
         return Recipe.objects.filter(
             tags__title__in=tags
-        )
+        ).distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -29,8 +29,26 @@ class IndexView(RecipeBaseView):
     extra_context = {'title': 'Рецепты'}
 
 
-class RecipeViewSlug(ListView):
+class RecipeViewDetail(DetailView):
+    model = Recipe
+    pk_url_kwarg = 'recipe_id'
+    template_name = 'recipes/singlePage.html'
+    context_object_name = 'recipe'
+
+
+class RecipeNew(LoginRequiredMixin, CreateView):
+    model = Recipe
+    extra_context = {'title': 'Создание рецепта'}
+    form_class = RecipeForm
+    template_name = 'recipes/formRecipe.html'
+
+
+class RecipeViewEdit(RecipeBaseView):
     pass
+
+
+class ProfileView(RecipeBaseView):
+    model = Recipe
 
 
 class Subscriptions(ListView):
@@ -38,14 +56,6 @@ class Subscriptions(ListView):
 
 
 class Favorites(ListView):
-    pass
-
-
-class ProfileView(ListView):
-    pass
-
-
-class RecipeView(ListView):
     pass
 
 

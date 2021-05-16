@@ -52,7 +52,8 @@ class Recipe(models.Model):
     slug = AutoSlugField(
         populate_from='title',
         unique_with=['author'],
-        allow_unicode=True
+        allow_unicode=True,
+        editable=False
     )
     tags = models.ManyToManyField(
         'Tag',
