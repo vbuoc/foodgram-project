@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'import_export',
     'stdimage',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -138,6 +139,15 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_URL = "/auth/login/"
 LOGIN_REDIRECT_URL = "index"
 
+# API
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

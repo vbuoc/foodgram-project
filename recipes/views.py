@@ -41,6 +41,7 @@ class RecipeNew(LoginRequiredMixin, CreateView):
     extra_context = {'title': 'Создание рецепта'}
     form_class = RecipeForm
     template_name = 'recipes/formRecipe.html'
+    # Recipe has no author.!!!
 
 
 class RecipeViewEdit(RecipeBaseView):

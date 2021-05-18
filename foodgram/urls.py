@@ -13,6 +13,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
     path('about/', include(flatpages_urls)),
+    path('api/', include('api.urls')),
     path('', include('recipes.urls')),
 
 ]
