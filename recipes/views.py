@@ -1,4 +1,10 @@
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
@@ -49,8 +55,27 @@ class RecipeNew(LoginRequiredMixin, CreateView):
         return super().form_valid(valid_form)
 
 
-class RecipeViewEdit(RecipeBaseView):
-    pass
+class RecipeViewEdit(UpdateView):
+    # self.object - доступ к обновляемому объекту
+    model = Recipe
+    pk_url_kwarg = 'recipe_id'
+    form_class = RecipeForm
+    template_name = 'recipes/formRecipe.html'
+
+    # def has_permission(self, request):
+    #     return request.user.is_active and request.user == self.object.author
+
+
+class RecipeViewDelete(DeleteView):
+    model = Recipe
+    pk_url_kwarg = 'recipe_id'
+    success_url = reverse_lazy('index')
+
+    def get(self, request, *args, **kwargs):
+        """
+        Using 'DeleteView' without Confirmation
+        """
+        return self.post(request, *args, **kwargs)
 
 
 class ProfileView(RecipeBaseView):

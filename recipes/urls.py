@@ -9,16 +9,20 @@ purchases_urls = [
 
 recipes_urls = [
     path('new/', recipes_views.RecipeNew.as_view(), name='recipe_new'),
-    path('<int:recipe_id>/',
-         recipes_views.RecipeViewDetail.as_view(),
-         name='recipe_detail',
-    ),
     path(
         '<int:recipe_id>/edit/',
         recipes_views.RecipeViewEdit.as_view(),
         name='recipe_edit',
     ),
-
+    path(
+        '<int:recipe_id>/delete/',
+        recipes_views.RecipeViewDelete.as_view(),
+        name='recipe_delete',
+    ),
+    path('<int:recipe_id>/',
+         recipes_views.RecipeViewDetail.as_view(),
+         name='recipe_detail',
+         )
 ]
 
 urlpatterns = [
