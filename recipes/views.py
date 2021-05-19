@@ -43,9 +43,6 @@ class RecipeNew(LoginRequiredMixin, CreateView):
     extra_context = {'title': 'Создание рецепта'}
     form_class = RecipeForm
     template_name = 'recipes/formRecipe.html'
-    success_url = reverse_lazy('recipe_detail')
-
-    # permission_required = ('news.add_post')
 
     def form_valid(self, form):
         valid_form = recipe_save(self, form)

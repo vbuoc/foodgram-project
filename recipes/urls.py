@@ -12,7 +12,7 @@ recipes_urls = [
     path('<int:recipe_id>/',
          recipes_views.RecipeViewDetail.as_view(),
          name='recipe_detail',
-         ),
+    ),
     path(
         '<int:recipe_id>/edit/',
         recipes_views.RecipeViewEdit.as_view(),
@@ -20,12 +20,13 @@ recipes_urls = [
     ),
 
 ]
+
 urlpatterns = [
     path('', recipes_views.IndexView.as_view(), name='index'),
+    path('recipes/', include(recipes_urls)),
     path('subscriptions/', recipes_views.Subscriptions.as_view(), name='subscriptions'),
     path('favorites/', recipes_views.Favorites.as_view(), name='favorites'),
     path('purchases/', include(purchases_urls)),
-    path('recipes/', include(recipes_urls)),
     path('<str:username>/', recipes_views.ProfileView.as_view(), name='profile_view'),
 
 ]

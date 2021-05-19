@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
+from django.urls import reverse
 
 from slugify import UniqueSlugify
 from stdimage import StdImageField
@@ -78,6 +79,9 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('recipe_detail', kwargs={'recipe_id': self.id})
 
 
 class RecipeIngredient(models.Model):
