@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 
-from autoslug import AutoSlugField
+from slugify import UniqueSlugify
 from stdimage import StdImageField
 
 User = get_user_model()
@@ -49,11 +49,10 @@ class Recipe(models.Model):
         verbose_name='Ингредиент'
     )
     cooking_time = models.PositiveSmallIntegerField('Время приготовления, мин.')
-    slug = AutoSlugField(
-        populate_from='title',
-        unique_with=['author'],
-        allow_unicode=True,
-        editable=False
+    slug = models.SlugField(
+        max_length=255,
+        blank=True,
+        null=True
     )
     tags = models.ManyToManyField(
         'Tag',
@@ -70,6 +69,12 @@ class Recipe(models.Model):
         ordering = ('-pub_date',)
         verbose_name = 'рецепт'
         verbose_name_plural = 'рецепты'
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            slugify_unique = UniqueSlugify(separator='-', to_lower=True)
+            self.slug = slugify_unique(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

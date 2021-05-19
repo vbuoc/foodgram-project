@@ -1,5 +1,8 @@
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.db import transaction, IntegrityError
+from django.http import HttpResponseBadRequest
 
 from recipes.models import Recipe, Tag
 from recipes.forms import RecipeForm
@@ -41,7 +44,20 @@ class RecipeNew(LoginRequiredMixin, CreateView):
     extra_context = {'title': 'Создание рецепта'}
     form_class = RecipeForm
     template_name = 'recipes/formRecipe.html'
-    # Recipe has no author.!!!
+    success_url = reverse_lazy('recipe_detail')
+
+    # permission_required = ('news.add_post')
+
+    def form_valid(self, form):
+        try:
+            with transaction.atomic():
+                recipe_form = form.save(commit=False)
+                recipe_form.author = self.request.user
+                recipe_form.save()
+        except IntegrityError:
+            raise HttpResponseBadRequest
+
+        return super().form_valid(form)
 
 
 class RecipeViewEdit(RecipeBaseView):
