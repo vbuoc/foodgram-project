@@ -69,7 +69,8 @@ class RecipeViewEdit(LoginRequiredMixin,
 
     def test_func(self):
         obj = self.get_object()
-        return obj.author == self.request.user
+        return self.request.user.is_superuser or \
+               obj.author == self.request.user
 
 
 class RecipeViewDelete(LoginRequiredMixin,
@@ -81,7 +82,8 @@ class RecipeViewDelete(LoginRequiredMixin,
 
     def test_func(self):
         obj = self.get_object()
-        return obj.author == self.request.user
+        return self.request.user.is_superuser or \
+               obj.author == self.request.user
 
     def get(self, request, *args, **kwargs):
         """
