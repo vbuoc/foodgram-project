@@ -1,11 +1,10 @@
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.db import transaction, IntegrityError
-from django.http import HttpResponseBadRequest
 
 from recipes.models import Recipe, Tag
 from recipes.forms import RecipeForm
+from recipes.utils import recipe_save
 
 
 class RecipeBaseView(ListView):
@@ -49,15 +48,8 @@ class RecipeNew(LoginRequiredMixin, CreateView):
     # permission_required = ('news.add_post')
 
     def form_valid(self, form):
-        try:
-            with transaction.atomic():
-                recipe_form = form.save(commit=False)
-                recipe_form.author = self.request.user
-                recipe_form.save()
-        except IntegrityError:
-            raise HttpResponseBadRequest
-
-        return super().form_valid(form)
+        valid_form = recipe_save(self, form)
+        return super().form_valid(valid_form)
 
 
 class RecipeViewEdit(RecipeBaseView):
