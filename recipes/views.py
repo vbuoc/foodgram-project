@@ -5,7 +5,10 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin
+)
 from django.urls import reverse_lazy
 
 from recipes.models import Recipe, Tag
@@ -55,21 +58,30 @@ class RecipeNew(LoginRequiredMixin, CreateView):
         return super().form_valid(valid_form)
 
 
-class RecipeViewEdit(UpdateView):
+class RecipeViewEdit(LoginRequiredMixin,
+                     UserPassesTestMixin,
+                     UpdateView):
     # self.object - доступ к обновляемому объекту
     model = Recipe
     pk_url_kwarg = 'recipe_id'
     form_class = RecipeForm
     template_name = 'recipes/formRecipe.html'
 
-    # def has_permission(self, request):
-    #     return request.user.is_active and request.user == self.object.author
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author == self.request.user
 
 
-class RecipeViewDelete(DeleteView):
+class RecipeViewDelete(LoginRequiredMixin,
+                       UserPassesTestMixin,
+                       DeleteView):
     model = Recipe
     pk_url_kwarg = 'recipe_id'
     success_url = reverse_lazy('index')
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author == self.request.user
 
     def get(self, request, *args, **kwargs):
         """
