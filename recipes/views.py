@@ -17,7 +17,7 @@ from recipes.utils import recipe_save
 
 
 class RecipeBaseView(ListView):
-    paginate_by = 6
+    paginate_by = 3
 
     def get_queryset(self):
         tags = self.request.GET.getlist(
