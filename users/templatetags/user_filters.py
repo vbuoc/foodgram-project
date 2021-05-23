@@ -9,6 +9,12 @@ User = get_user_model()
 
 
 @register.filter
+def tags_to_url_params(tags):
+    url_param_tags = [f'tag={tag}' for tag in tags]
+    return '&' + '&'.join(url_param_tags)
+
+
+@register.filter
 def addclass(field, css):
     return field.as_widget(attrs={'class': css})
 
@@ -32,7 +38,13 @@ def get_full_name_or_username(user):
 
 @register.filter
 def is_favored(recipe, user):
-    return Favorite.objects.filter(recipe=recipe, user=user).exists()
+    return user.is_authenticated and Favorite.objects.filter(recipe=recipe, user=user).exists()
+
+
+@register.filter
+def is_subscribed_to(user, author):
+    return False
+    #return Subscription.objects.filter(user=user, author=author).exists()
 
 
 @register.filter

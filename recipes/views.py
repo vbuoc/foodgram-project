@@ -2,6 +2,8 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin
 )
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
@@ -15,6 +17,9 @@ from api.models import Favorite
 from recipes.forms import RecipeForm
 from recipes.models import Recipe, Tag
 from recipes.utils import recipe_save
+
+
+User = get_user_model()
 
 
 class RecipeBaseView(ListView):
@@ -39,6 +44,34 @@ class RecipeBaseView(ListView):
 class IndexView(RecipeBaseView):
     template_name = 'recipes/index.html'
     extra_context = {'title': 'Рецепты'}
+
+
+class ProfileView(ListView):
+    paginate_by = 3
+    template_name = 'recipes/authorRecipe.html'
+    extra_context = {'title': 'Рецепты'}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['all_tags'] = Tag.objects.all()
+        context['author'] = get_object_or_404(
+            User,
+            username=self.kwargs.get('username'))
+        return context
+
+    def get_queryset(self):
+        tags = self.request.GET.getlist(
+            'tag',
+            ['breakfast', 'lunch', 'dinner']
+        )
+        author = get_object_or_404(
+            User,
+            username=self.kwargs.get('username'))
+
+        return author.recipes.filter(
+            tags__title__in=tags
+        ).prefetch_related('tags').distinct()
+
 
 
 class RecipeViewDetail(DetailView):
@@ -93,7 +126,7 @@ class RecipeViewDelete(LoginRequiredMixin,
 
 
 class Favorites(ListView):
-    paginate_by = 6
+    paginate_by = 3
     model = Favorite
     template_name = 'recipes/index.html'
     extra_context = {'title': 'Избранное'}
@@ -119,10 +152,6 @@ class Favorites(ListView):
         context = super().get_context_data(**kwargs)
         context['all_tags'] = Tag.objects.all()
         return context
-
-
-class ProfileView(RecipeBaseView):
-    model = Recipe
 
 
 class Subscriptions(ListView):
