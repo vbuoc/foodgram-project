@@ -40,16 +40,10 @@ class CDViewSet(mixins.CreateModelMixin,
 
 
 class IngredientViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['^title', ]
-
-    def get_queryset(self):
-        data = self.request.GET['query']
-        if data is not None:
-            queryset = Ingredient.objects.filter(title__istartswith=data)
-            return queryset
-        return Ingredient.objects.none()
 
 
 class FavoriteViewSet(CDViewSet):

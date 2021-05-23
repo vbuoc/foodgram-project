@@ -33,6 +33,10 @@ class RecipeBaseView(ListView):
 
         return Recipe.objects.filter(
             tags__title__in=tags
+        ).select_related(
+            'author'
+        ).prefetch_related(
+            'tags'
         ).distinct()
 
     def get_context_data(self, **kwargs):
