@@ -1,3 +1,8 @@
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin
+)
+from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
     DetailView,
@@ -5,14 +10,10 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from django.contrib.auth.mixins import (
-    LoginRequiredMixin,
-    UserPassesTestMixin
-)
-from django.urls import reverse_lazy
 
-from recipes.models import Recipe, Tag
+from api.models import Favorite
 from recipes.forms import RecipeForm
+from recipes.models import Recipe, Tag
 from recipes.utils import recipe_save
 
 
@@ -61,7 +62,6 @@ class RecipeNew(LoginRequiredMixin, CreateView):
 class RecipeViewEdit(LoginRequiredMixin,
                      UserPassesTestMixin,
                      UpdateView):
-    # self.object - доступ к обновляемому объекту
     model = Recipe
     pk_url_kwarg = 'recipe_id'
     form_class = RecipeForm
@@ -90,15 +90,40 @@ class RecipeViewDelete(LoginRequiredMixin,
         return self.post(request, *args, **kwargs)
 
 
+class Favorites(ListView):
+    paginate_by = 6
+    model = Favorite
+    template_name = 'recipes/index.html'
+    extra_context = {'title': 'Избранное'}
+
+    def get_queryset(self):
+        tags = self.request.GET.getlist(
+            'tag',
+            ['breakfast', 'lunch', 'dinner']
+        )
+
+        recipes = Recipe.objects.filter(
+            favored_by__user=self.request.user,
+            tags__title__in=tags
+        ).select_related(
+            'author'
+        ).prefetch_related(
+            'tags'
+        ).distinct()
+
+        return recipes
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['all_tags'] = Tag.objects.all()
+        return context
+
+
 class ProfileView(RecipeBaseView):
     model = Recipe
 
 
 class Subscriptions(ListView):
-    pass
-
-
-class Favorites(ListView):
     pass
 
 

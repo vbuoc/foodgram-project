@@ -1,6 +1,9 @@
 from django import template
 from django.contrib.auth import get_user_model
 
+from api.models import Favorite
+
+
 register = template.Library()
 User = get_user_model()
 
@@ -25,3 +28,14 @@ def declenize(number, args):
 @register.filter
 def get_full_name_or_username(user):
     return user.get_full_name() or user.username
+
+
+@register.filter
+def is_favored(recipe, user):
+    return Favorite.objects.filter(recipe=recipe, user=user).exists()
+
+
+@register.filter
+def is_in_shop_list_of(recipe, user):
+    return False
+    #return Purchase.objects.filter(recipe=recipe, user=user).exists()
