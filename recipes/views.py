@@ -12,6 +12,8 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+from django.conf import settings
+from django.db.models import Count, Sum
 
 from api.models import Favorite
 from recipes.forms import RecipeForm
@@ -23,7 +25,7 @@ User = get_user_model()
 
 
 class RecipeBaseView(ListView):
-    paginate_by = 3
+    paginate_by = settings.PAGINATION_PAGE_SIZE
 
     def get_queryset(self):
         tags = self.request.GET.getlist(
@@ -51,7 +53,7 @@ class IndexView(RecipeBaseView):
 
 
 class ProfileView(ListView):
-    paginate_by = 3
+    paginate_by = settings.PAGINATION_PAGE_SIZE
     template_name = 'recipes/authorRecipe.html'
     extra_context = {'title': 'Рецепты'}
 
@@ -130,7 +132,7 @@ class RecipeViewDelete(LoginRequiredMixin,
 
 
 class Favorites(ListView):
-    paginate_by = 3
+    paginate_by = settings.PAGINATION_PAGE_SIZE
     model = Favorite
     template_name = 'recipes/index.html'
     extra_context = {'title': 'Избранное'}
@@ -159,7 +161,16 @@ class Favorites(ListView):
 
 
 class Subscriptions(ListView):
-    pass
+    paginate_by = settings.PAGINATION_PAGE_SIZE
+    template_name = 'recipes/subscriptions.html'
+    extra_context = {'title': 'Мои подписки'}
+
+    def get_queryset(self):
+        return User.objects.filter(
+                    following__user=self.request.user
+                ).prefetch_related(
+                    'recipes'
+                ).annotate(recipe_count=Count('recipes')).order_by('username')
 
 
 class PurchasesView(ListView):

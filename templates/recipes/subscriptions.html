@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="main__header">
+    <h1 class="main__title">{{ title }}</h1>
+  </div>
+  <div class="card-list">
+    {% for author in page_obj %}
+      {% include './includes/myFollow.html' with author=author %}
+    {% endfor %}
+  </div>
+  {% if page_obj.has_other_pages %}
+    {% include './includes/paginator.html' with page=page_obj paginator=page_obj.paginator %}
+  {% endif %} 
+{% endblock %}
+
+{% block js %}
+  <script src="{% static 'js/components/MainCards.js' %}"></script>
+  <script src="{% static 'js/components/Subscribe.js' %}"></script>
+  <script src="{% static 'js/components/MyFollow.js' %}"></script>
+  <script src="{% static 'js/config/config.js' %}"></script>
+  <script src="{% static 'js/components/Header.js' %}"></script>
+  <script src="{% static 'js/api/Api.js' %}"></script>
+  <script src="{% static 'js/myFollow.js' %}"></script>
+{% endblock %}

@@ -129,7 +129,7 @@ REST_FRAMEWORK = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Pagination
-PAGINATION_PAGE_SIZE = 6
+PAGINATION_PAGE_SIZE = 3
 
 INTERNAL_IPS = ['*']
 

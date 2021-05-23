@@ -7,9 +7,10 @@ from django.contrib.auth import get_user_model
 
 from api.serializers import (
     IngredientSerializer,
-    FavoriteSerializer
+    FavoriteSerializer,
+    SubscriptionSerializer,
     )
-from api.models import Favorite
+from api.models import Favorite, Subscription
 from recipes.models import Ingredient
 
 User = get_user_model()
@@ -51,3 +52,10 @@ class FavoriteViewSet(CDViewSet):
     serializer_class = FavoriteSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     lookup_field = 'recipe'
+
+
+class SubscriptionViewSet(CDViewSet):
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+    lookup_field = 'author'
