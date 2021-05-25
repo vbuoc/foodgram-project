@@ -3,7 +3,7 @@ from django.urls import path, include
 import recipes.views as recipes_views
 
 recipes_urls = [
-    path('new/', recipes_views.RecipeNew.as_view(), name='recipe_new'),
+    path('new/', recipes_views.RecipeViewNew.as_view(), name='recipe_new'),
     path(
         '<int:recipe_id>/edit/',
         recipes_views.RecipeViewEdit.as_view(),

@@ -87,7 +87,7 @@ class RecipeViewDetail(DetailView):
     context_object_name = 'recipe'
 
 
-class RecipeNew(LoginRequiredMixin, CreateView):
+class RecipeViewNew(LoginRequiredMixin, CreateView):
     model = Recipe
     extra_context = {'title': 'Создание рецепта'}
     form_class = RecipeForm
