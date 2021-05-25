@@ -18,7 +18,7 @@ from django.db.models import Count, Sum
 from api.models import Favorite
 from recipes.forms import RecipeForm
 from recipes.models import Recipe, Tag
-from recipes.utils import recipe_save
+from recipes.utils import recipe_save, recipe_edit
 
 
 User = get_user_model()
@@ -94,8 +94,8 @@ class RecipeNew(LoginRequiredMixin, CreateView):
     template_name = 'recipes/formRecipe.html'
 
     def form_valid(self, form):
-        valid_form = recipe_save(self, form)
-        return super().form_valid(valid_form)
+        self.object = recipe_save(self, form)
+        return super().form_valid(form)
 
 
 class RecipeViewEdit(LoginRequiredMixin,
@@ -105,6 +105,10 @@ class RecipeViewEdit(LoginRequiredMixin,
     pk_url_kwarg = 'recipe_id'
     form_class = RecipeForm
     template_name = 'recipes/formRecipe.html'
+
+    def form_valid(self, form):
+        self.object = recipe_edit(self, form, instance=self.object)
+        return super().form_valid(form)
 
     def test_func(self):
         obj = self.get_object()
