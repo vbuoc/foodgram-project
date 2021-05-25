@@ -33,6 +33,7 @@ def get_front_ingredients(request):
 def recipe_save(self, form):
     try:
         with transaction.atomic():
+
             recipe = form.save(commit=False)
             recipe.author = self.request.user
             recipe.save()
@@ -56,8 +57,16 @@ def recipe_save(self, form):
                 )
             RecipeIngredient.objects.bulk_create(objects)
             form.save_m2m()
+            return recipe
 
     except IntegrityError:
         raise HttpResponseBadRequest
 
-    return form
+
+def recipe_edit(self, form, instance):
+    try:
+        with transaction.atomic():
+            RecipeIngredient.objects.filter(recipe=instance).delete()
+            return recipe_save(self, form)
+    except IntegrityError:
+        raise HttpResponseBadRequest

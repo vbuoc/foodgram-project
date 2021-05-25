@@ -1,4 +1,3 @@
-from decimal import Decimal
 from django.conf import settings
 
 from recipes.models import Recipe

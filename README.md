@@ -9,3 +9,6 @@
 
 `django-import-export
 `
+
+`Для сохранения в pdf: sudo apt-get install wkhtmltopdf
+`
