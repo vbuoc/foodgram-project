@@ -46,6 +46,7 @@ class CDViewSet(mixins.CreateModelMixin,
 class IngredientViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
     filter_backends = [filters.SearchFilter]
     search_fields = ['^title', ]
 

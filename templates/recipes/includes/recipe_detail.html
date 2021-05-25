@@ -23,7 +23,6 @@
     </div>
   </div>
   <div class="card__footer">
-    {% if user.is_authenticated %}
       {% if request|is_in_shop_list_of:recipe %}
         <button class="button button_style_light-blue-outline" name="purchases">
           <span class="icon-check button__icon"></span> Рецепт добавлен
@@ -33,6 +32,7 @@
           <span class="icon-plus button__icon"></span>Добавить в покупки
         </button>
       {% endif %}
+    {% if user.is_authenticated %}
      {% include './favoriteBtn.html' with recipe=recipe big=False %}
     {% endif %}
   </div>
