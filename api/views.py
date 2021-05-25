@@ -1,6 +1,7 @@
 from rest_framework import mixins, filters, viewsets, status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
@@ -11,7 +12,9 @@ from api.serializers import (
     SubscriptionSerializer,
     )
 from api.models import Favorite, Subscription
-from recipes.models import Ingredient
+from recipes.models import Ingredient, Recipe
+
+from purchases.purchase import Purchase
 
 User = get_user_model()
 
@@ -59,3 +62,26 @@ class SubscriptionViewSet(CDViewSet):
     serializer_class = SubscriptionSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
     lookup_field = 'author'
+
+
+@api_view(['POST'])
+def purchase_add(request):
+    purchase = Purchase(request)
+    recipe = get_object_or_404(Recipe, id=request.data.get('recipe'))
+    if recipe:
+        purchase.add(
+            recipe=recipe,
+            update_quantity=True
+        )
+        return Response({'success': True}, status=status.HTTP_200_OK)
+    return Response({'success': False}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['DELETE'])
+def purchase_delete(request, recipe_id):
+    purchase = Purchase(request)
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    if recipe:
+        purchase.remove(recipe)
+        return Response({'success': True}, status=status.HTTP_200_OK)
+    return Response({'success': False}, status=status.HTTP_404_NOT_FOUND)

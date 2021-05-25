@@ -14,8 +14,8 @@ urlpatterns = [
     path('auth/', include('users.urls')),
     path('about/', include(flatpages_urls)),
     path('api/', include('api.urls')),
+    path('', include('purchases.urls')),
     path('', include('recipes.urls')),
-
 ]
 
 if settings.DEBUG:

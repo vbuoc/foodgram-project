@@ -1,4 +1,5 @@
 {% load user_filters %}
+{% load purchases_filters%}
 
 <div class="card" data-id="{{ recipe.id }}">
   <a href="{% url 'recipe_detail' recipe.id %}" class="link"><img src="{{ recipe.image.large.url }}" alt="{{ recipe.title }}"
@@ -23,7 +24,7 @@
   </div>
   <div class="card__footer">
     {% if user.is_authenticated %}
-      {% if recipe|is_in_shop_list_of:user %}
+      {% if request|is_in_shop_list_of:recipe %}
         <button class="button button_style_light-blue-outline" name="purchases">
           <span class="icon-check button__icon"></span> Рецепт добавлен
         </button>

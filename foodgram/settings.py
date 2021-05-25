@@ -15,6 +15,7 @@ SITE_ID = 1  # example.com
 
 # Application definition
 INSTALLED_APPS = [
+    'purchases',
     'recipes',
     'users',
     'api',
@@ -136,3 +137,6 @@ INTERNAL_IPS = ['*']
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'
+
+# MarketPlace
+PURCHASE_SESSION_ID = 'purchase'

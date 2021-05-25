@@ -171,11 +171,3 @@ class Subscriptions(ListView):
                 ).prefetch_related(
                     'recipes'
                 ).annotate(recipe_count=Count('recipes')).order_by('username')
-
-
-class PurchasesView(ListView):
-    pass
-
-
-class PurchasesDownloadView(ListView):
-    pass

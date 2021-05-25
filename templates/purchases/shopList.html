@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load user_filters %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="main__header">
+    <h1 class="main__title">{{ title }}</h1>
+  </div>
+  <div class="card-list card-list_column">
+    <ul class="shopping-list">
+      {% for recipe in purchases %}
+        <li class="shopping-list__item" data-id="{{ recipe.recipe.id }}">
+          {% include 'recipes/includes/recipe_detail_small.html' with recipe=recipe.recipe shop_list=True %}
+          <a href="#" class="shopping-list__button link">Удалить</a>
+        </li>
+      {% endfor %}
+    </ul>
+    {% comment %}
+    <a href="{% url 'purchases_download' %}"><button class="button button_style_blue">Скачать список</button></a>
+    {% endcomment %}
+  </div>
+{% endblock %}
+{% block js %}
+  <script src="{% static 'js/config/config.js' %}"></script>
+  <script src="{% static 'js/components/ShopList.js' %}"></script>
+  <script src="{% static 'js/components/Header.js' %}"></script>
+  <script src="{% static 'js/api/Api.js' %}"></script>
+  <script src="{% static 'js/shopList.js' %}"></script>
+{% endblock %}
