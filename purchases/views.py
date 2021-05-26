@@ -6,7 +6,7 @@ from django.db.models import Sum
 
 from purchases.purchase import Purchase
 from purchases.utils import generate_pdf
-from recipes.models import Recipe, RecipeIngredient
+from recipes.models import Recipe
 
 
 def purchases_view(request):

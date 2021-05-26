@@ -49,7 +49,9 @@ class Recipe(models.Model):
         through='RecipeIngredient',
         verbose_name='Ингредиент'
     )
-    cooking_time = models.PositiveSmallIntegerField('Время приготовления, мин.')
+    cooking_time = models.PositiveSmallIntegerField(
+        'Время приготовления, мин.'
+    )
     slug = models.SlugField(
         max_length=255,
         blank=True,

@@ -38,7 +38,8 @@ def get_full_name_or_username(user):
 
 @register.filter
 def is_favored(recipe, user):
-    return user.is_authenticated and Favorite.objects.filter(recipe=recipe, user=user).exists()
+    return user.is_authenticated \
+           and Favorite.objects.filter(recipe=recipe, user=user).exists()
 
 
 @register.filter

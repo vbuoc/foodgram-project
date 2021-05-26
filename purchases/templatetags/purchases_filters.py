@@ -1,5 +1,4 @@
 from django import template
-from django.contrib.auth import get_user_model
 
 from purchases.purchase import Purchase
 

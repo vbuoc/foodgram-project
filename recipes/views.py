@@ -13,7 +13,7 @@ from django.views.generic import (
     DeleteView
 )
 from django.conf import settings
-from django.db.models import Count, Sum
+from django.db.models import Count
 
 from api.models import Favorite
 from recipes.forms import RecipeForm
@@ -79,7 +79,6 @@ class ProfileView(ListView):
         ).prefetch_related('tags').distinct()
 
 
-
 class RecipeViewDetail(DetailView):
     model = Recipe
     pk_url_kwarg = 'recipe_id'
@@ -112,8 +111,8 @@ class RecipeViewEdit(LoginRequiredMixin,
 
     def test_func(self):
         obj = self.get_object()
-        return self.request.user.is_superuser or \
-               obj.author == self.request.user
+        return \
+            self.request.user.is_superuser or obj.author == self.request.user
 
 
 class RecipeViewDelete(LoginRequiredMixin,
@@ -125,8 +124,8 @@ class RecipeViewDelete(LoginRequiredMixin,
 
     def test_func(self):
         obj = self.get_object()
-        return self.request.user.is_superuser or \
-               obj.author == self.request.user
+        return self.request.user.is_superuser\
+            or obj.author == self.request.user
 
     def get(self, request, *args, **kwargs):
         """

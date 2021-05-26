@@ -24,7 +24,12 @@ urlpatterns = [
     path('', recipes_views.IndexView.as_view(), name='index'),
     path('recipes/', include(recipes_urls)),
     path('favorites/', recipes_views.Favorites.as_view(), name='favorites'),
-    path('subscriptions/', recipes_views.Subscriptions.as_view(), name='subscriptions'),
-    path('<str:username>/', recipes_views.ProfileView.as_view(), name='profile_view'),
-
+    path(
+        'subscriptions/',
+        recipes_views.Subscriptions.as_view(), name='subscriptions'
+    ),
+    path(
+        '<str:username>/',
+        recipes_views.ProfileView.as_view(), name='profile_view'
+    ),
 ]

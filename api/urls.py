@@ -26,7 +26,10 @@ urlpatterns = [
 # Purchases
 purchases_urls = [
     path(r'purchases/', purchase_add, name='purchase_add'),
-    path(r'purchases/<int:recipe_id>/', purchase_delete, name='purchase_delete'),
+    path(
+        r'purchases/<int:recipe_id>/',
+        purchase_delete, name='purchase_delete'
+    ),
 ]
 
 urlpatterns += [
