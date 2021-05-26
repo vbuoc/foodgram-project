@@ -3,6 +3,12 @@ from django.contrib.flatpages.views import flatpage
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import handler400, handler404, handler500
+
+
+handler400 = 'foodgram.views.page_bad_request'  # noga
+handler404 = 'foodgram.views.page_not_found'  # noga
+handler500 = 'foodgram.views.server_error'  # noga
 
 flatpages_urls = [
     path('author/', flatpage, {'url': '/author/'}, name='about_author'),

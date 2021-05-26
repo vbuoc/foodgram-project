@@ -110,15 +110,13 @@ USE_TZ = True
 
 # Static & media files
 STATIC_URL = '/static/'
-_STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 if DEBUG:
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'staticfiles'), )
-    STATIC_ROOT = _STATIC_ROOT
-else:
-    STATIC_ROOT = _STATIC_ROOT
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'staticfiles'),)
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Login auth
 LOGIN_URL = "/auth/login/"
