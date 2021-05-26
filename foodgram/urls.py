@@ -3,7 +3,7 @@ from django.contrib.flatpages.views import flatpage
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.conf.urls import handler400, handler404, handler500
+from django.conf.urls import handler400, handler404, handler500  # noga
 
 
 handler400 = 'foodgram.views.page_bad_request'  # noga
@@ -11,17 +11,17 @@ handler404 = 'foodgram.views.page_not_found'  # noga
 handler500 = 'foodgram.views.server_error'  # noga
 
 flatpages_urls = [
-    path('author/', flatpage, {'url': '/author/'}, name='about_author'),
-    path('tech/', flatpage, {'url': '/tech/'}, name='about_tech'),
+    path('author/', flatpage, {'url': '/author/'},  name='about_author'),
+    path('tech/',   flatpage, {'url': '/tech/'},    name='about_tech'),
 ]
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('auth/', include('users.urls')),
-    path('about/', include(flatpages_urls)),
-    path('api/', include('api.urls')),
-    path('', include('purchases.urls')),
-    path('', include('recipes.urls')),
+    path('admin/',  admin.site.urls),
+    path('auth/',   include('users.urls')),
+    path('about/',  include(flatpages_urls)),
+    path('api/',    include('api.urls')),
+    path('',        include('purchases.urls')),
+    path('',        include('recipes.urls')),
 ]
 
 if settings.DEBUG:

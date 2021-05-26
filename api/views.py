@@ -23,6 +23,8 @@ class CDViewSet(mixins.CreateModelMixin,
                 mixins.DestroyModelMixin,
                 viewsets.GenericViewSet):
 
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
+
     def get_object(self, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
 
@@ -40,7 +42,10 @@ class CDViewSet(mixins.CreateModelMixin,
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object(user=self.request.user)
         success = instance.delete()
-        return Response({'success': bool(success)}, status=status.HTTP_200_OK)
+        return Response(
+            {'success': bool(success)},
+            status=status.HTTP_200_OK
+        )
 
 
 class IngredientViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -54,14 +59,12 @@ class IngredientViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 class FavoriteViewSet(CDViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, ]
     lookup_field = 'recipe'
 
 
 class SubscriptionViewSet(CDViewSet):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly, )
     lookup_field = 'author'
 
 
@@ -74,8 +77,14 @@ def purchase_add(request):
             recipe=recipe,
             update_quantity=True
         )
-        return Response({'success': True}, status=status.HTTP_200_OK)
-    return Response({'success': False}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {'success': True},
+            status=status.HTTP_200_OK
+        )
+    return Response(
+        {'false': False},
+        status=status.HTTP_404_NOT_FOUND
+    )
 
 
 @api_view(['DELETE'])
@@ -84,5 +93,11 @@ def purchase_delete(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     if recipe:
         purchase.remove(recipe)
-        return Response({'success': True}, status=status.HTTP_200_OK)
-    return Response({'success': False}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {'success': True},
+            status=status.HTTP_200_OK
+        )
+    return Response(
+        {'false': False},
+        status=status.HTTP_404_NOT_FOUND
+    )
