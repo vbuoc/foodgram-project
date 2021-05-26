@@ -136,3 +136,4 @@ static/
 assets/
 media/
 sent_emails/
+staticfiles/
