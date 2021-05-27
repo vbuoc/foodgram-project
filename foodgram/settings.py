@@ -1,16 +1,21 @@
 import os
 from pathlib import Path
 
-ENV = os.environ
+# ENV
+import environ
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ENV.get('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['84.252.140.86', 'localhost', '127.0.0.1']
 SITE_ID = 1  # example.com
@@ -71,16 +76,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-# Database
+# Databases
 DATABASES = {
-    'default': {
-        'ENGINE': ENV.get('DB_ENGINE'),
-        'NAME': ENV.get('DB_NAME'),
-        'USER': ENV.get('POSTGRES_USER'),
-        'PASSWORD': ENV.get('POSTGRES_PASSWORD'),
-        'HOST': ENV.get('DB_HOST'),
-        'PORT': ENV.get('DB_PORT'),
-    }
+    'default': env.db('DATABASE_URL'),
 }
 
 # Password validation
