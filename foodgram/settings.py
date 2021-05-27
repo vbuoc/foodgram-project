@@ -7,13 +7,12 @@ ENV = os.environ
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$2$z8w!ifueyi5ubx-@wnph3*#5r$15o4m_f89nrh8@z-r13p$'
-# ENV.get('SECRET_KEY')
+SECRET_KEY = ENV.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['84.252.140.86', 'localhost', '127.0.0.1']
 SITE_ID = 1  # example.com
 
 # Application definition
@@ -75,8 +74,12 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': ENV.get('DB_ENGINE'),
+        'NAME': ENV.get('DB_NAME'),
+        'USER': ENV.get('POSTGRES_USER'),
+        'PASSWORD': ENV.get('POSTGRES_PASSWORD'),
+        'HOST': ENV.get('DB_HOST'),
+        'PORT': ENV.get('DB_PORT'),
     }
 }
 

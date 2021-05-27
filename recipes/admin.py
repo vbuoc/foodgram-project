@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Count
 
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
@@ -33,16 +34,23 @@ class RecipeIngredientInline(admin.TabularInline):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
+    inlines = (RecipeIngredientInline, )
     list_display = (
         'id', 'title', 'author', 'slug',
-        'cooking_time', 'pub_date'
+        'cooking_time', 'get_favorites_count', 'pub_date'
     )
     list_filter = ('author', 'tags__title')
     search_fields = ('title', 'author__username')
     autocomplete_fields = ('author', )
     ordering = ('-pub_date', )
-    inlines = (RecipeIngredientInline, )
-    date_hierarchy = 'pub_date'
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        return queryset.annotate(favorite_count=Count('favored_by'))
+
+    @staticmethod
+    def get_favorites_count(obj):
+        return obj.favorite_count
 
 
 @admin.register(Tag)
