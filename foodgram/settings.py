@@ -1,24 +1,21 @@
 import os
 from pathlib import Path
 
-# ENV
-import environ
-env = environ.Env(
-    DEBUG=(bool, False)
-)
-environ.Env.read_env()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = bool(os.environ.get('DEBUG'))
 
-ALLOWED_HOSTS = ['84.252.140.86', 'localhost', '127.0.0.1']
-SITE_ID = 1  # example.com
+ALLOWED_HOSTS = []
+ALLOWED_HOSTS_ENV = os.environ.get('ALLOWED_HOSTS')
+if ALLOWED_HOSTS_ENV:
+    ALLOWED_HOSTS.extend(ALLOWED_HOSTS_ENV.split(','))
+
+SITE_ID = 1
 
 # Application definition
 INSTALLED_APPS = [
@@ -78,7 +75,14 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 # Databases
 DATABASES = {
-    'default': env.db('DATABASE_URL'),
+    'default': {
+        'ENGINE': os.environ.get('DB_ENGINE'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
+    }
 }
 
 # Password validation
@@ -112,9 +116,7 @@ USE_TZ = True
 # Static & media files
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-if DEBUG:
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'staticfiles'),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'staticfiles'),)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

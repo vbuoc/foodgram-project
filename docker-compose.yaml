@@ -12,7 +12,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-     - ./foodgram/.env
+     - ./.env
 
   web:
     container_name: foodgram
@@ -23,7 +23,7 @@ services:
       - static_volume:/app/static/
       - media_volume:/app/media/
     env_file:
-      - ./foodgram/.env
+      - ./.env
     depends_on:
       - db
 

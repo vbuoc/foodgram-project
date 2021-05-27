@@ -4,7 +4,6 @@ defusedxml==0.7.1
 diff-match-patch==20200713
 Django==3.2.2
 django-cors-headers==3.7.0
-django-environ==0.4.5
 django-import-export==2.5.0
 django-stdimage==5.3.0
 djangorestframework==3.12.4
