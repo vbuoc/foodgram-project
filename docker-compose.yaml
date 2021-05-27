@@ -4,6 +4,7 @@ volumes:
   static_volume:
   media_volume:
   postgres_data:
+  nginx_config:
 
 services:
   db:
@@ -17,11 +18,13 @@ services:
   web:
     container_name: foodgram
     image: 'vbuoc/foodgram:latest'
+    # build: .
     restart: always
     command: gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000 --access-logfile -
     volumes:
       - static_volume:/app/static/
       - media_volume:/app/media/
+      - nginx_config:/app/nginx/
     env_file:
       - ./.env
     depends_on:
@@ -30,11 +33,11 @@ services:
   nginx:
     container_name: nginx
     restart: always
-    image: nginx:1.19
+    image: nginx:1.19-alpine
     volumes:
       - static_volume:/app/static/
       - media_volume:/app/media/
-      - ./nginx/:/etc/nginx/conf.d
+      - nginx_config:/etc/nginx/conf.d
     ports:
       - 80:80
     depends_on:

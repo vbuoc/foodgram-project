@@ -10,7 +10,7 @@ from recipes.models import Recipe
 
 
 def purchases_view(request):
-    template_name = 'purchases/ShopList.html'
+    template_name = 'purchases/shopList.html'
     purchases = Purchase(request)
     return render(
         request,

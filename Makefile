@@ -12,15 +12,15 @@ dump: venv
 	python manage.py dumpdata --exclude auth.permission --exclude contenttypes > fixtures.json
 
 dockerup: venv
-	docker-compose -f docker-compose.yaml up -d
+	docker-compose -f docker-compose.yaml up -d --build
 
 dockerdown: venv
 	docker-compose down
 
 dockerinit: venv
 	docker-compose -f docker-compose.yaml up -d
-	docker-compose -f docker-compose.yaml run --rm web python manage.py createsuperuser
 	docker-compose -f docker-compose.yaml run --rm web python manage.py loaddata fixtures.json
+	docker-compose -f docker-compose.yaml run --rm web python manage.py createsuperuser
 
-gitpush: venv
-	git commit -a -m "bugfix docker and settings, fix .env" && git push
+git: venv
+	git commit -a -m "(1) ci-cd big fix" && git push

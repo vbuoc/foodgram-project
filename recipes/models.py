@@ -50,7 +50,8 @@ class Recipe(models.Model):
         verbose_name='Ингредиент'
     )
     cooking_time = models.PositiveSmallIntegerField(
-        'Время приготовления, мин.'
+        verbose_name='Время приготовления, мин.',
+        validators=[MinValueValidator(1)]
     )
     slug = models.SlugField(
         max_length=255,
@@ -100,7 +101,10 @@ class RecipeIngredient(models.Model):
     )
 
     class Meta:
-        unique_together = ('ingredient', 'recipe')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['recipe', 'ingredient'],
+                name='recipe_ingredients')]
 
 
 class Tag(models.Model):
