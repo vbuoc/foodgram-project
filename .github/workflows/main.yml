@@ -41,7 +41,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/foodgram:latest
+        tags: vbuoc/foodgram:latest
 
   deploy:
     name: Deploy the app
@@ -70,7 +70,7 @@ jobs:
             cd app
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker image prune -f
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram:latest
+            sudo docker pull vbuoc/foodgram:latest
             sudo docker-compose up -d --force-recreate
 
   send_message:
