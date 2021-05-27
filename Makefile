@@ -23,4 +23,4 @@ dockerinit: venv
 	docker-compose -f docker-compose.yaml run --rm web python manage.py loaddata fixtures.json
 
 gitpush: venv
-	git commit -a -m "add Docker, git workflow" && git push
+	git commit -a -m "bugfix docker and settings, fix .env" && git push
