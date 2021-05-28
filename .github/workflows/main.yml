@@ -57,7 +57,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           port: 22
-          source: '.env, docker-compose.yaml, nginx/default.conf'
+          source: 'docker-compose.yaml, nginx/default.conf'
           target: '/home/${{ secrets.USER }}/app'
 
       - name: Execute remote ssh commands to deploy
@@ -68,6 +68,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd app
+            ls -al
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker image prune -f
             sudo docker pull vbuoc/foodgram:latest
