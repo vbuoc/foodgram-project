@@ -30,5 +30,6 @@ class RecipeForm(forms.ModelForm):
                 name_ingredient = self.data[f'nameIngredient_{num}']
                 self.add_error(
                     None,
-                    f'Количество ингредиента "{name_ingredient}" должно быть больше 0.'
+                    f'Количество ингредиента "{name_ingredient}"'
+                    f' должно быть больше 0.'
                 )
