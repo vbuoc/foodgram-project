@@ -21,6 +21,7 @@ class RecipeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(RecipeForm, self).__init__(*args, **kwargs)
+        # подменяем валидацию для "PositiveSmallIntegerField"
         self.fields['cooking_time'].validators[0].limit_value = 1
 
         for key, value in self.data.items():
