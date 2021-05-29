@@ -151,5 +151,19 @@ CORS_URLS_REGEX = r'^/api/.*$'
 PURCHASE_SESSION_ID = 'purchase'
 
 # MAIL
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+ADMINS = (
+    ('admin', 'vbuoc@yandex.ru'),
+)
+MANAGERS = ADMINS
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

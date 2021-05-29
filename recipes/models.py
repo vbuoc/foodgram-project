@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.urls import reverse
 
+
 from slugify import UniqueSlugify
 from stdimage import StdImageField
 
@@ -51,7 +52,6 @@ class Recipe(models.Model):
     )
     cooking_time = models.PositiveSmallIntegerField(
         verbose_name='Время приготовления, мин.',
-        validators=[MinValueValidator(1)]
     )
     slug = models.SlugField(
         max_length=255,

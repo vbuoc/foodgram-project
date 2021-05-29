@@ -138,3 +138,5 @@ assets/
 media/
 sent_emails/
 staticfiles/
+main-docker-compose.yaml
+local_settings.py
