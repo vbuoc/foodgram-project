@@ -30,12 +30,13 @@ def get_front_ingredients(request):
     return ingredients
 
 
-def recipe_save(self, form):
+def recipe_save(self, form, edit=False):
     try:
         with transaction.atomic():
 
             recipe = form.save(commit=False)
-            recipe.author = self.request.user
+            if not edit:
+                recipe.author = self.request.user
             recipe.save()
 
             objects = []
@@ -67,6 +68,6 @@ def recipe_edit(self, form, instance):
     try:
         with transaction.atomic():
             RecipeIngredient.objects.filter(recipe=instance).delete()
-            return recipe_save(self, form)
+            return recipe_save(self, form, True)
     except IntegrityError:
         raise HttpResponseBadRequest
