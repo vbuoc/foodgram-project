@@ -25,7 +25,7 @@ class RecipeForm(forms.ModelForm):
         self.fields['cooking_time'].validators[0].limit_value = 1
 
         for key, value in self.data.items():
-            if 'valueIngredient' in key and int(value) <= 0:
+            if 'valueIngredient' in key and float(value) <= 0:
                 num = key.split('_')[1]
                 name_ingredient = self.data[f'nameIngredient_{num}']
                 self.add_error(
