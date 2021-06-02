@@ -35,24 +35,10 @@ services:
     restart: always
     image: nginx:1.19-alpine
     volumes:
-      - web-root:/var/www/html
       - static_volume:/app/static/
       - media_volume:/app/media/
       - nginx_config:/etc/nginx/conf.d
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
     ports:
       - 80:80
     depends_on:
       - web
-
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - web-root:/var/www/html
-    depends_on:
-      - nginx
-    command: certonly --webroot --webroot-path=/var/www/html --email admin@foodgram.live --agree-tos --no-eff-email --staging -d foodgram.live  -d www.foodgram.live
