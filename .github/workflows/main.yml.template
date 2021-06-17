@@ -43,6 +43,37 @@ jobs:
         push: true
         tags: vbuoc/foodgram:latest
 
+  deploy:
+    name: Deploy the app
+    runs-on: ubuntu-latest
+    needs: build_and_push_to_docker_hub
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Copy file via ssh password
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          source: 'docker-compose.yaml, nginx/default.conf'
+          target: '/home/${{ secrets.USER }}/app'
+
+      - name: Execute remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd app
+            ls -al
+            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker image prune -f
+            sudo docker pull vbuoc/foodgram:latest
+            sudo docker-compose up -d --force-recreate
+
   send_message:
     name: Send to Telegram
     runs-on: ubuntu-latest
