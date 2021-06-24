@@ -4,7 +4,6 @@ volumes:
   static_volume:
   media_volume:
   postgres_data:
-  nginx_config:
 
 services:
   db:
@@ -24,7 +23,6 @@ services:
     volumes:
       - static_volume:/app/static/
       - media_volume:/app/media/
-      - nginx_config:/app/nginx/
     env_file:
       - ./.env
     depends_on:
@@ -33,12 +31,15 @@ services:
   nginx:
     container_name: nginx
     restart: always
-    image: nginx:1.19-alpine
+    #image: nginx:1.19-alpine
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     volumes:
       - static_volume:/app/static/
       - media_volume:/app/media/
-      - nginx_config:/etc/nginx/conf.d
     ports:
       - 80:80
     depends_on:
+      - db
       - web
