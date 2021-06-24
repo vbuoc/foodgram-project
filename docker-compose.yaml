@@ -24,7 +24,7 @@ services:
     volumes:
       - static_volume:/app/static/
       - media_volume:/app/media/
-      - nginx_config:/app/nginx/default.conf
+      - nginx_config:/app/nginx/
     env_file:
       - ./.env
     depends_on:
@@ -37,7 +37,7 @@ services:
     volumes:
       - static_volume:/app/static/
       - media_volume:/app/media/
-      - nginx_config:/etc/nginx/nginx.conf:ro
+      - nginx_config:/etc/nginx/conf.d
     ports:
       - 80:80
     depends_on:
