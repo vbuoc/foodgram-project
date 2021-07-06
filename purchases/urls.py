@@ -8,6 +8,14 @@ from purchases.views import (
 
 urlpatterns = [
     path('purchases/', purchases_view, name='purchases'),
-    path('purchases/download/', purchases_download, name='purchases_download'),
-    path('purchases/send_email', purchases_send_email, name='purchases_send_email')
+    path(
+        'purchases/download/',
+        purchases_download,
+        name='purchases_download'
+    ),
+    path(
+        'purchases/send_email',
+        purchases_send_email,
+        name='purchases_send_email'
+    )
 ]

@@ -4,6 +4,7 @@ from celery import shared_task
 
 from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 
 from purchases.utils import get_pdf_data
 
@@ -12,7 +13,7 @@ User = get_user_model()
 
 @shared_task
 def send_email_recipe_list(user_id, recipe_ids_json):
-    user = User.objects.get(id=user_id)
+    user = get_object_or_404(User, pk=user_id)
     if not user.is_authenticated:
         raise ValueError("user is not authenticated")
 
@@ -20,7 +21,7 @@ def send_email_recipe_list(user_id, recipe_ids_json):
     if not email_address:
         raise ValueError('email is empty')
 
-    print('[\/] begin email sending to', email_address)
+    print('[>] begin email sending to', email_address)
 
     if isinstance(email_address, str):
         recipient_list = [email_address]
@@ -42,7 +43,7 @@ def send_email_recipe_list(user_id, recipe_ids_json):
     result = email.send(fail_silently=False)
 
     print(
-        '[/\] end email sending',
+        '[<] end email sending',
         'True' if result > 0 else 'False'
     )
 

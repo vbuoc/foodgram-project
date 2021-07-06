@@ -28,8 +28,8 @@ def purchases_download(request):
 
 def purchases_send_email(request):
     purchases = Purchase(request)
-    recipe_ids_json = json.dumps(dict(purchases.purchase.keys()))
-    task = send_email_recipe_list.delay(
+    recipe_ids_json = json.dumps(list(purchases.purchase.keys()))
+    send_email_recipe_list.delay(
         request.user.id,
         recipe_ids_json
     )
