@@ -6,6 +6,16 @@ volumes:
   postgres_data:
 
 services:
+
+  rabbitmq:
+    hostname: rabbitmq
+    container_name: rabbitmq
+    restart: always
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+
   db:
     container_name: postgres
     image: postgres:latest
@@ -13,11 +23,12 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
      - ./.env
+    depends_on:
+      - rabbitmq
 
   web:
     container_name: foodgram
-    image: 'vbuoc/foodgram:latest'
-    #build: .
+    build: .
     restart: always
     command: gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000 --access-logfile -
     volumes:
@@ -27,6 +38,21 @@ services:
       - ./.env
     depends_on:
       - db
+
+  celery_worker:
+    container_name: celery_worker
+    restart: always
+    network_mode: host
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    volumes:
+      - static_volume:/app/static/
+      - media_volume:/app/media/
+    env_file:
+      - ./.env
+    depends_on:
+      - rabbitmq
 
   nginx:
     container_name: nginx

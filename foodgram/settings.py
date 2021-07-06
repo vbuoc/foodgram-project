@@ -173,12 +173,17 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 ADMINS = (
-    ('admin', 'vbuoc@yandex.ru'),
+    ('admin', EMAIL_HOST_USER),
 )
 MANAGERS = ADMINS
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
     EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Celery Configuration Options
+CELERY_TIMEZONE = 'UTC'
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672'

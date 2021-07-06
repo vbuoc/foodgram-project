@@ -23,7 +23,7 @@ dockerdown: venv
 dockerinit: venv
 	docker-compose  up -d
 	docker-compose  run --rm web python manage.py loaddata fixtures.json
-	docker-compose  run --rm web python manage.py createsuperuser
+	#docker-compose  run --rm web python manage.py createsuperuser
 
 git: venv
 	git commit -a -m "(2) ci-cd bug fix" && git push

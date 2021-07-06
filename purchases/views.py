@@ -1,12 +1,10 @@
-import io
+import json
 
-from django.shortcuts import render
-from django.http import FileResponse
-from django.db.models import Sum
+from django.shortcuts import render, redirect
 
 from purchases.purchase import Purchase
-from purchases.utils import generate_pdf
-from recipes.models import Recipe
+from purchases.utils import get_pdf_file
+from purchases.tasks import send_email_recipe_list
 
 
 def purchases_view(request):
@@ -25,22 +23,18 @@ def purchases_view(request):
 def purchases_download(request):
     purchases = Purchase(request)
     recipe_ids = purchases.purchase.keys()
-    ingredients = Recipe.objects.filter(
-        id__in=recipe_ids
-    ).prefetch_related(
-        'ingredients'
-    ).order_by(
-        'ingredients__title'
-    ).values(
-        'ingredients__title', 'ingredients__dimension'
-    ).annotate(amount=Sum('ingredients_amounts__quantity')).all()
+    return get_pdf_file(recipe_ids)
 
-    pdf = generate_pdf(
-        'purchases/shopList_download.html', {'ingredients': ingredients}
-    )
 
-    return FileResponse(
-        io.BytesIO(pdf),
-        filename='ingredients.pdf',
-        as_attachment=True
+def purchases_send_email(request):
+    purchases = Purchase(request)
+    recipe_ids_json = json.dumps(dict(purchases.purchase.keys()))
+    task = send_email_recipe_list.delay(
+        request.user.id,
+        recipe_ids_json
     )
+    # send_email_recipe_list(
+    #     request.user.id,
+    #     recipe_ids_json
+    # )
+    return redirect('purchases')
